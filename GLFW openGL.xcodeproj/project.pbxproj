@@ -32,7 +32,6 @@
 		F710E81A215BD57B007E09E7 /* libGLEW.2.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.1.0.dylib; path = ../../../../usr/local/Cellar/glew/2.1.0/lib/libGLEW.2.1.0.dylib; sourceTree = "<group>"; };
 		F710E81C215BD5D0007E09E7 /* libglfw.3.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.2.dylib; path = ../../../../usr/local/Cellar/glfw/3.2.1/lib/libglfw.3.2.dylib; sourceTree = "<group>"; };
 		F710E81E215BF3F2007E09E7 /* glfw */ = {isa = PBXFileReference; lastKnownFileType = folder; name = glfw; path = ../../../../usr/local/Cellar/glfw; sourceTree = "<group>"; };
-		F710E823215D5988007E09E7 /* Lamborghini_Aventador.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Lamborghini_Aventador.obj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,7 +68,6 @@
 		F710E80F215BD15F007E09E7 /* GLFW openGL */ = {
 			isa = PBXGroup;
 			children = (
-				F710E823215D5988007E09E7 /* Lamborghini_Aventador.obj */,
 				F710E810215BD15F007E09E7 /* main.cpp */,
 			);
 			path = "GLFW openGL";

@@ -27,7 +27,7 @@ const char *vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
 "void main()\n"
 "{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos, 1.0);\n"
+"   gl_Position = vec4(aPos.x*0.4, aPos.y*0.4, aPos.z*0.4, 1.0);\n"
 "}\0";
 const char *fragmentShaderSource = "#version 330 core\n"
 "out vec4 FragColor;\n"
@@ -152,7 +152,7 @@ int main()
         6, 7, 3,
     };
     
-    load_obj("/Users/shibowen/workspace/GLFW openGL/source/Lamborghini_Aventador.obj", vertices, indices);
+   // load_obj("/Users/shibowen/workspace/GLFW openGL/source/Lamborghini_Aventador.obj", vertices, indices);
     
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
@@ -186,7 +186,7 @@ int main()
         
         // render
         // ------
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         
         glUseProgram(shaderProgram);
@@ -207,7 +207,7 @@ int main()
 }
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow *window)
 {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
