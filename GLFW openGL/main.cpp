@@ -118,7 +118,7 @@ int main()
     std::vector< glm::vec3 > vertices;
     std::vector<unsigned int> indices;
     
-    GLfloat cube_vertices[] = {
+    float cube_vertices[] = {
         // front
         -1.0, -1.0,  1.0,
         1.0, -1.0,  1.0,
@@ -131,7 +131,7 @@ int main()
         -1.0,  1.0, -1.0,
     };
     
-    GLushort cube_elements[] = {
+    unsigned int cube_elements[] = {
         // front
         0, 1, 2,
         2, 3, 0,
@@ -152,7 +152,7 @@ int main()
         6, 7, 3,
     };
     
-   // load_obj("/Users/shibowen/workspace/GLFW openGL/source/Lamborghini_Aventador.obj", vertices, indices);
+    // load_obj("/Users/shibowen/workspace/GLFW openGL/source/Lamborghini_Aventador.obj", vertices, indices);
     
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
@@ -171,7 +171,7 @@ int main()
     glEnableVertexAttribArray(0);
     
     
-
+    
     
     
     
@@ -186,7 +186,7 @@ int main()
         
         // render
         // ------
-        glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         
         glUseProgram(shaderProgram);
@@ -263,6 +263,6 @@ void load_obj(const char* filename, vector<glm::vec3> &vertices,std::vector<unsi
         }
     }
     fclose(file);
-            
- 
+    
+    
 }
