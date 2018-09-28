@@ -1,2 +1,6 @@
 /Build/*
-/Index/*
+/Index/
+*.d
+*.o
+*.dio
+*.o*
