@@ -10,7 +10,6 @@
 #include <string>
 #include<algorithm>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 #include "ShaderLoader.h"
 #include <unistd.h>
 
@@ -77,7 +76,7 @@ int main()
     }
     
     //enable deep test
-    //glEnable(GL_DEPTH_TEST);
+
     
     //shader
     Shader sd("../../../source/vShader.vs","../../../source/fShader.fs");
@@ -122,9 +121,7 @@ int main()
     vector< glm::vec3 > vertices_1;
     vector<unsigned int> indices_1;
      load_obj("../../../source/Lamborghini_Aventador.obj", vertices_1, indices_1);
-    for(int i = 0 ; i<500; i++){
-        cout<<vertices_1[i].x<<","<<vertices_1[i].y<<","<<vertices_1[i].z;
-    }
+    
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -136,16 +133,15 @@ int main()
     glBufferData(GL_ARRAY_BUFFER, vertices_1.size()*sizeof(vertices_1),&vertices_1[0], GL_STATIC_DRAW);
     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,indices_1.size()*sizeof(indices_1),&vertices_1[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,indices_1.size()*sizeof(indices_1),&indices_1[0], GL_STATIC_DRAW);
     
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_TRUE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+
+    glEnable(GL_DEPTH_TEST);
     
     
-    
-    
-    
-    
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     
     // render loop
     // -----------
@@ -158,7 +154,7 @@ int main()
         // render
         // ------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         sd.use();
         glBindVertexArray(VAO);
@@ -211,7 +207,7 @@ void load_obj(const char* filename, vector<glm::vec3> &vertices,std::vector<unsi
 
         istringstream iss(newline);
         iss>>word;
-        if(word =="vn"){
+        if(word =="v"){
             glm::vec3 vertex;
             iss>>vertex.x>>vertex.y>>vertex.z;
             vertices.push_back(vertex);

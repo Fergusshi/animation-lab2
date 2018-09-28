@@ -155,27 +155,4 @@ dependencies: /Users/shibowen/workspace/GLFW\ openGL/GLFW\ openGL/main.cpp \
   /usr/local/include/glm/detail/func_integer.inl \
   /usr/local/include/glm/detail/func_integer_simd.inl \
   /usr/local/include/glm/detail/../simd/integer.h \
-  /usr/local/include/glm/gtc/matrix_transform.hpp \
-  /usr/local/include/glm/gtc/../mat4x4.hpp \
-  /usr/local/include/glm/gtc/../vec2.hpp \
-  /usr/local/include/glm/gtc/../vec3.hpp \
-  /usr/local/include/glm/gtc/../vec4.hpp \
-  /usr/local/include/glm/gtc/../ext/matrix_projection.hpp \
-  /usr/local/include/glm/./ext/../gtc/constants.hpp \
-  /usr/local/include/glm/gtc/../ext/scalar_constants.hpp \
-  /usr/local/include/glm/./ext/scalar_constants.inl \
-  /usr/local/include/glm/gtc/constants.inl \
-  /usr/local/include/glm/./ext/../geometric.hpp \
-  /usr/local/include/glm/./ext/../trigonometric.hpp \
-  /usr/local/include/glm/./ext/../matrix.hpp \
-  /usr/local/include/glm/./ext/matrix_projection.inl \
-  /usr/local/include/glm/gtc/../ext/matrix_clip_space.hpp \
-  /usr/local/include/glm/./ext/../ext/scalar_constants.hpp \
-  /usr/local/include/glm/./ext/matrix_clip_space.inl \
-  /usr/local/include/glm/gtc/../ext/matrix_transform.hpp \
-  /usr/local/include/glm/./ext/matrix_transform.inl \
-  /usr/local/include/glm/gtc/matrix_transform.inl \
-  /usr/local/include/glm/gtc/../geometric.hpp \
-  /usr/local/include/glm/gtc/../trigonometric.hpp \
-  /usr/local/include/glm/gtc/../matrix.hpp \
   /Users/shibowen/workspace/GLFW\ openGL/GLFW\ openGL/ShaderLoader.h
