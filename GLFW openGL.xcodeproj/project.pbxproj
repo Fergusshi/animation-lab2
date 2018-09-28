@@ -11,6 +11,7 @@
 		F710E819215BD461007E09E7 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F710E818215BD461007E09E7 /* OpenGL.framework */; };
 		F710E820215BF576007E09E7 /* libglfw.3.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F710E81C215BD5D0007E09E7 /* libglfw.3.2.dylib */; };
 		F710E821215BF5E5007E09E7 /* libGLEW.2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F710E81A215BD57B007E09E7 /* libGLEW.2.1.0.dylib */; };
+		F710E826215DB65C007E09E7 /* ShaderLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F710E825215DB65C007E09E7 /* ShaderLoader.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,6 +33,8 @@
 		F710E81A215BD57B007E09E7 /* libGLEW.2.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.1.0.dylib; path = ../../../../usr/local/Cellar/glew/2.1.0/lib/libGLEW.2.1.0.dylib; sourceTree = "<group>"; };
 		F710E81C215BD5D0007E09E7 /* libglfw.3.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.2.dylib; path = ../../../../usr/local/Cellar/glfw/3.2.1/lib/libglfw.3.2.dylib; sourceTree = "<group>"; };
 		F710E81E215BF3F2007E09E7 /* glfw */ = {isa = PBXFileReference; lastKnownFileType = folder; name = glfw; path = ../../../../usr/local/Cellar/glfw; sourceTree = "<group>"; };
+		F710E824215DB5BE007E09E7 /* ShaderLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderLoader.h; sourceTree = "<group>"; };
+		F710E825215DB65C007E09E7 /* ShaderLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderLoader.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +72,8 @@
 			isa = PBXGroup;
 			children = (
 				F710E810215BD15F007E09E7 /* main.cpp */,
+				F710E824215DB5BE007E09E7 /* ShaderLoader.h */,
+				F710E825215DB65C007E09E7 /* ShaderLoader.cpp */,
 			);
 			path = "GLFW openGL";
 			sourceTree = "<group>";
@@ -141,6 +146,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F710E811215BD15F007E09E7 /* main.cpp in Sources */,
+				F710E826215DB65C007E09E7 /* ShaderLoader.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

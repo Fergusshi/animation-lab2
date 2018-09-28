@@ -8,12 +8,13 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-
+#include<algorithm>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "ShaderLoader.h"
+#include <unistd.h>
 
 using namespace std;
-
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -36,11 +37,15 @@ const char *fragmentShaderSource = "#version 330 core\n"
 "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
 "}\n\0";
 
-
 int main()
 {
     // glfw: initialize and configure
     // ------------------------------
+    char path[1024];
+    getcwd(path, sizeof(path));
+    std::string current_working_dir(path);
+    std::cout << current_working_dir << std::endl;
+    
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -72,53 +77,15 @@ int main()
     }
     
     //enable deep test
-    glEnable(GL_DEPTH_TEST);
+    //glEnable(GL_DEPTH_TEST);
     
     //shader
-    //---------
-    int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-    // check for shader compile errors
-    int success;
-    char infoLog[512];
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-    // fragment shader
-    int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
-    // check for shader compile errors
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-    // link shaders
-    int shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-    // check for linking errors
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if (!success) {
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-    }
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+    Shader sd("../../../source/vShader.vs","../../../source/fShader.fs");
     
     //set VAO VBO
     //---------
-    std::vector< glm::vec3 > vertices;
-    std::vector<unsigned int> indices;
     
-    GLfloat cube_vertices[] = {
+    float vertices[] = {
         // front
         -1.0, -1.0,  1.0,
         1.0, -1.0,  1.0,
@@ -131,7 +98,7 @@ int main()
         -1.0,  1.0, -1.0,
     };
     
-    GLushort cube_elements[] = {
+    unsigned int  indices[] = {
         // front
         0, 1, 2,
         2, 3, 0,
@@ -152,8 +119,12 @@ int main()
         6, 7, 3,
     };
     
-   // load_obj("/Users/shibowen/workspace/GLFW openGL/source/Lamborghini_Aventador.obj", vertices, indices);
-    
+    vector< glm::vec3 > vertices_1;
+    vector<unsigned int> indices_1;
+     load_obj("../../../source/Lamborghini_Aventador.obj", vertices_1, indices_1);
+    for(int i = 0 ; i<500; i++){
+        cout<<vertices_1[i].x<<","<<vertices_1[i].y<<","<<vertices_1[i].z;
+    }
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -162,16 +133,16 @@ int main()
     glBindVertexArray(VAO);
     
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices),cube_vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices_1.size()*sizeof(vertices_1),&vertices_1[0], GL_STATIC_DRAW);
     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cube_elements),cube_elements, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,indices_1.size()*sizeof(indices_1),&vertices_1[0], GL_STATIC_DRAW);
     
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     
     
-
+    
     
     
     
@@ -186,16 +157,14 @@ int main()
         
         // render
         // ------
-        glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         
-        glUseProgram(shaderProgram);
+        sd.use();
         glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, indices_1.size(), GL_UNSIGNED_INT, 0);
         
-        glDrawElements(GL_TRIANGLES, sizeof(cube_vertices), GL_UNSIGNED_INT, 0);
         
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
@@ -207,7 +176,7 @@ int main()
 }
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-//---------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
 void processInput(GLFWwindow *window)
 {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -223,46 +192,59 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
+
+
 void load_obj(const char* filename, vector<glm::vec3> &vertices,std::vector<unsigned int> &vertexIndices)
 {
     std::vector< glm::vec3 > temp_vertices;
     std::vector< glm::vec2 > temp_uvs;
     std::vector< glm::vec3 > temp_normals;
     
-    FILE * file = fopen(filename, "r");
-    if( file == NULL ){
+    ifstream in;
+    string newline,word;
+    in.open(filename);
+    if(!in){
         printf("Impossible to open the file !\n");
         return ;
     }
-    
-    while( 1 ){
-        
-        char lineHeader[128];
-        // read the first word of the line
-        int res = fscanf(file, "%s", lineHeader);
-        if (res == EOF)
-            break;
-        else{
-            if ( strcmp( lineHeader, "v" ) == 0 ){
-                glm::vec3 vertex;
-                fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z );
-                vertices.push_back(vertex);
-                
-            }else if ( strcmp( lineHeader, "f" ) == 0 ){
-                std::string vertex1, vertex2, vertex3;
-                unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
-                int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
-                if (matches != 9){
-                    printf("File can't be read by our simple parser : ( Try exporting with other options\n");
-                    return ;
-                }
-                vertexIndices.push_back(vertexIndex[0]);
-                vertexIndices.push_back(vertexIndex[1]);
-                vertexIndices.push_back(vertexIndex[2]);
-            }
+    while(getline(in,newline)){
+
+        istringstream iss(newline);
+        iss>>word;
+        if(word =="vn"){
+            glm::vec3 vertex;
+            iss>>vertex.x>>vertex.y>>vertex.z;
+            vertices.push_back(vertex);
         }
-    }
-    fclose(file);
+        else if(word =="f"){
+            replace(newline.begin(),newline.end(),'/',' ');
+            istringstream f_is(newline);
+            unsigned int vertexindice = 0;
+            int count = 0;
+            unsigned int a[4] ;
+            string temp;
+            f_is>>temp;
+            while(f_is>>vertexindice){
+                if(count%3 == 0){
+                    a[count/3] = vertexindice;
+                    
+                }
+                count++;
+            }
+            vertexIndices.push_back(a[0]);
+            vertexIndices.push_back(a[1]);
+            vertexIndices.push_back(a[2]);
+            if(count>=9){
+                vertexIndices.push_back(a[0]);
+                vertexIndices.push_back(a[2]);
+                vertexIndices.push_back(a[3]);
+            }
             
- 
+
+        }
+        
+    }
+    in.close();
+
+    
 }
