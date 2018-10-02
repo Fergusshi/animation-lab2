@@ -279,6 +279,7 @@ int main(int arg1, char ** arg2)
         glBindVertexArray(VAO_cube);
         glBindBuffer(GL_ARRAY_BUFFER, VBO_cube);
         sd_cube.use();
+        for(int i = 0; i<keyframeSet.size();i++){
         glm::mat4 model = glm::mat4(1.0);
         model = glm::translate(model, keyframeSet[i].position);
         model =model*keyframeSet[i].getThisRotationMatrix(eulerMode);
