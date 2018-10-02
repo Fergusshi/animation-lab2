@@ -275,4 +275,10 @@ dependencies: /Users/shibowen/workspace/GLFW\ openGL/GLFW\ openGL/main.cpp \
   /usr/local/include/glm/gtx/dual_quaternion.inl \
   /usr/local/include/glm/gtx/../geometric.hpp \
   /usr/local/include/glm/gtx/string_cast.inl \
-  /Users/shibowen/workspace/GLFW\ openGL/GLFW\ openGL/ShaderLoader.h
+  /usr/local/include/glm/gtx/euler_angles.hpp \
+  /usr/local/include/glm/gtx/euler_angles.inl \
+  /usr/local/include/glm/gtx/compatibility.hpp \
+  /usr/local/include/glm/gtx/compatibility.inl \
+  /Users/shibowen/workspace/GLFW\ openGL/GLFW\ openGL/ShaderLoader.h \
+  /Users/shibowen/workspace/GLFW\ openGL/GLFW\ openGL/Loader.hpp \
+  /Users/shibowen/workspace/GLFW\ openGL/GLFW\ openGL/KeyFrame.hpp

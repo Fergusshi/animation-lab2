@@ -35,6 +35,9 @@
 		F710E81E215BF3F2007E09E7 /* glfw */ = {isa = PBXFileReference; lastKnownFileType = folder; name = glfw; path = ../../../../usr/local/Cellar/glfw; sourceTree = "<group>"; };
 		F710E824215DB5BE007E09E7 /* ShaderLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderLoader.h; sourceTree = "<group>"; };
 		F710E825215DB65C007E09E7 /* ShaderLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderLoader.cpp; sourceTree = "<group>"; };
+		F744B1AD2161C6A700258D40 /* KeyFrame.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = KeyFrame.hpp; sourceTree = "<group>"; };
+		F744B1B02161D10D00258D40 /* Loader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Loader.hpp; sourceTree = "<group>"; };
+		F744B1B32161E5A700258D40 /* Interpolation.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Interpolation.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,7 +74,10 @@
 		F710E80F215BD15F007E09E7 /* GLFW openGL */ = {
 			isa = PBXGroup;
 			children = (
+				F744B1AD2161C6A700258D40 /* KeyFrame.hpp */,
 				F710E810215BD15F007E09E7 /* main.cpp */,
+				F744B1B32161E5A700258D40 /* Interpolation.hpp */,
+				F744B1B02161D10D00258D40 /* Loader.hpp */,
 				F710E824215DB5BE007E09E7 /* ShaderLoader.h */,
 				F710E825215DB65C007E09E7 /* ShaderLoader.cpp */,
 			);

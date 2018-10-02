@@ -10,5 +10,21 @@
 #define Interpolation_hpp
 
 #include <stdio.h>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+class Interpolation{
+    
+public:
+    
+    
+    
+}
+
+
+
+
+
+
+
 
 #endif /* Interpolation_hpp */
