@@ -1,0 +1,66 @@
+Thu Oct 04 17:35:33 2018: build-wrapper, version 5.1 (macosx-x86)
+Thu Oct 04 17:35:33 2018: System name: Darwin Nodename: shibowendeMacBook-Pro.local Release: 17.7.0 Version: Darwin Kernel Version 17.7.0: Thu Jun 21 22:53:14 PDT 2018; root:xnu-4570.71.2~1/RELEASE_X86_64 Machine: x86_64
+Thu Oct 04 17:35:33 2018: socket path: /tmp/build-wrapper-socket.2npKIw
+Thu Oct 04 17:35:33 2018: dynamic library found: /Users/shibowen/workspace/build-wrapper-macosx-x86/libinterceptor.dylib
+Thu Oct 04 17:35:33 2018: command executed as: <build-wrapper-macosx-x86>
+Thu Oct 04 17:35:33 2018: command line received: <make clean all>
+Thu Oct 04 17:35:33 2018: env 0: <TERM_PROGRAM=Apple_Terminal>
+Thu Oct 04 17:35:33 2018: env 1: <SHELL=/bin/bash>
+Thu Oct 04 17:35:33 2018: env 2: <TERM=xterm-256color>
+Thu Oct 04 17:35:33 2018: env 3: <TMPDIR=/var/folders/xd/xqp_55xd70z4fmn1msxvkbtm0000gn/T/>
+Thu Oct 04 17:35:33 2018: env 4: <Apple_PubSub_Socket_Render=/private/tmp/com.apple.launchd.1zTZ7393mF/Render>
+Thu Oct 04 17:35:33 2018: env 5: <TERM_PROGRAM_VERSION=404>
+Thu Oct 04 17:35:33 2018: env 6: <TERM_SESSION_ID=96066665-C5B2-41FA-9557-B30B078AE8C3>
+Thu Oct 04 17:35:33 2018: env 7: <USER=shibowen>
+Thu Oct 04 17:35:33 2018: env 8: <SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.7wJu12Ii1I/Listeners>
+Thu Oct 04 17:35:33 2018: env 9: <PATH=“./usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/shibowen/workspace/sonar-scanner-3.2.0.1227-macosx/bin :/Users/shibowen/workspace/build-wrapper-macosx-x86:/Library/Java/JavaVirtualMachines/jdk10.0.1.jdk/Contents/Home/bin”>
+Thu Oct 04 17:35:33 2018: env 10: <PWD=/Users/shibowen/workspace/GLFW openGL>
+Thu Oct 04 17:35:33 2018: env 11: <JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk10.0.1.jdk/Contents/Home>
+Thu Oct 04 17:35:33 2018: env 12: <LANG=en_US.UTF-8>
+Thu Oct 04 17:35:33 2018: env 13: <XPC_FLAGS=0x0>
+Thu Oct 04 17:35:33 2018: env 14: <XPC_SERVICE_NAME=0>
+Thu Oct 04 17:35:33 2018: env 15: <SHLVL=1>
+Thu Oct 04 17:35:33 2018: env 16: <HOME=/Users/shibowen>
+Thu Oct 04 17:35:33 2018: env 17: <LOGNAME=shibowen>
+Thu Oct 04 17:35:33 2018: env 18: <SECURITYSESSIONID=186a7>
+Thu Oct 04 17:35:33 2018: env 19: <_=/Users/shibowen/workspace/build-wrapper-macosx-x86/build-wrapper-macosx-x86>
+Thu Oct 04 17:35:33 2018: env 20: <OLDPWD=/Users/shibowen/workspace>
+Thu Oct 04 17:35:33 2018: executing: <make clean all>
+Thu Oct 04 17:35:33 2018: initializing json file
+Thu Oct 04 17:35:33 2018: process created with pid: 12371
+Thu Oct 04 17:35:33 2018: parent pid: 12370
+Thu Oct 04 17:35:33 2018: working directory: </Users/shibowen/workspace/GLFW openGL>
+Thu Oct 04 17:35:33 2018: executable: </Users/shibowen/workspace/build-wrapper-macosx-x86/build-wrapper-macosx-x86>
+Thu Oct 04 17:35:33 2018: argv[0]: <build-wrapper-macosx-x86>
+Thu Oct 04 17:35:33 2018: argv[1]: <-c>
+Thu Oct 04 17:35:33 2018: argv[2]: <>
+Thu Oct 04 17:35:33 2018: argv[3]: <make>
+Thu Oct 04 17:35:33 2018: argv[4]: <clean>
+Thu Oct 04 17:35:33 2018: argv[5]: <all>
+Thu Oct 04 17:35:33 2018: skipping process with pid: 12371
+Thu Oct 04 17:35:33 2018: process created with pid: 12372
+Thu Oct 04 17:35:33 2018: parent pid: 12371
+Thu Oct 04 17:35:33 2018: working directory: </Users/shibowen/workspace/GLFW openGL>
+Thu Oct 04 17:35:33 2018: executable: </private/tmp/sonarsource-build-wrapper-cache-501/usr/bin/make>
+Thu Oct 04 17:35:33 2018: argv[0]: <make>
+Thu Oct 04 17:35:33 2018: argv[1]: <clean>
+Thu Oct 04 17:35:33 2018: argv[2]: <all>
+Thu Oct 04 17:35:33 2018: skipping process with pid: 12372
+Thu Oct 04 17:35:33 2018: process created with pid: 12373
+Thu Oct 04 17:35:33 2018: parent pid: 12372
+Thu Oct 04 17:35:33 2018: working directory: </Users/shibowen/workspace/GLFW openGL>
+Thu Oct 04 17:35:33 2018: executable: </private/tmp/sonarsource-build-wrapper-cache-501/bin/sh>
+Thu Oct 04 17:35:33 2018: argv[0]: <sh>
+Thu Oct 04 17:35:33 2018: argv[1]: <-c>
+Thu Oct 04 17:35:33 2018: argv[2]: </Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -sdk '' -find make 2> /dev/null>
+Thu Oct 04 17:35:33 2018: skipping process with pid: 12373
+Thu Oct 04 17:35:35 2018: process created with pid: 12372
+Thu Oct 04 17:35:35 2018: parent pid: 12371
+Thu Oct 04 17:35:35 2018: working directory: </Users/shibowen/workspace/GLFW openGL>
+Thu Oct 04 17:35:35 2018: executable: </Applications/Xcode.app/Contents/Developer/usr/bin/make>
+Thu Oct 04 17:35:35 2018: argv[0]: </Applications/Xcode.app/Contents/Developer/usr/bin/make>
+Thu Oct 04 17:35:35 2018: argv[1]: <clean>
+Thu Oct 04 17:35:35 2018: argv[2]: <all>
+Thu Oct 04 17:35:35 2018: skipping process with pid: 12372
+Thu Oct 04 17:35:35 2018: finalizing json file
+Thu Oct 04 17:35:35 2018: returned with code: 2

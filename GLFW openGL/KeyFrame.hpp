@@ -15,7 +15,7 @@
 #include <cmath>
 
 #define GLKEY_EULER                   2.0
-#define    PI                         3.1415926
+#define    PI                         3.141592654
 
 class KeyFrame {
     
@@ -52,6 +52,7 @@ glm :: mat4 KeyFrame:: getRotationMatrix(glm :: vec4 orient,bool eMode){
     float y = orient.y;
     float z = orient.z;
     float w = orient.w;
+    glm :: mat3 rotation(1.0f);
     
     if(eMode){
        float ca = cos(z*PI/180);
@@ -60,7 +61,7 @@ glm :: mat4 KeyFrame:: getRotationMatrix(glm :: vec4 orient,bool eMode){
         float sb = sin(y*PI/180);
         float cr = cos(x*PI/180);
         float sr = sin(x*PI/180);
-        glm :: mat3 rotation(1.0f);
+        
         rotation[0][0] = ca*cb;
         rotation[0][1] = ca*sb*sr - sa*cr;
         rotation[0][2] = ca*sb*cr + sa*sr;
@@ -75,7 +76,7 @@ glm :: mat4 KeyFrame:: getRotationMatrix(glm :: vec4 orient,bool eMode){
         return glm ::transpose(glm :: mat4(rotation));
     }
     else{
-        glm :: mat3 rotation(1.0f);
+
         rotation[0][0] = 1 - 2*y*y - 2*z*z;
         rotation[0][1] = 2*x*y - 2*w*z;
         rotation[0][2] = 2*x*z + 2*w*y;
@@ -85,6 +86,7 @@ glm :: mat4 KeyFrame:: getRotationMatrix(glm :: vec4 orient,bool eMode){
         rotation[2][0] = 2*x*z - 2*w*y;
         rotation[2][1] = 2*y*z + 2*w*x;
         rotation[2][2] = 1 - 2*x*x - 2*y*y;
+
         return glm ::transpose(glm :: mat4(rotation));
         //return glm :: mat4(rotation);
     }

@@ -19,11 +19,24 @@ using namespace std;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 
 
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
+
+glm::vec3 cameraPos   = glm::vec3(0.0f, 100.0f, 2000.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f, 0.0f);
+
+bool firstMouse = true;
+float yaw   = -90.0f;    // yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right so we initially rotate a bit to the left.
+float pitch =  0.0f;
+float lastX =  800.0f / 2.0;
+float lastY =  600.0 / 2.0;
+float fov   =  45.0f;
+
 
 
 int main(int arg1, char ** arg2)
@@ -38,9 +51,10 @@ int main(int arg1, char ** arg2)
     
     //-----------------------------------------------------------------------
     bool mode = false;
-    bool eulerMode = false;
+    bool eulerMode = true;
     
     
+    // Frist Section
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -59,7 +73,13 @@ int main(int arg1, char ** arg2)
         return -1;
     }
     glfwMakeContextCurrent(window);
+    
+    //callbacks
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
+    
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    
     // glew initial
     glewExperimental = GL_TRUE;
     if (GLEW_OK != glewInit())
@@ -72,7 +92,7 @@ int main(int arg1, char ** arg2)
     
     
     
-    
+    //Second Section
     
     float B_splinesArray[16] =
     {
@@ -94,13 +114,21 @@ int main(int arg1, char ** arg2)
     glm::mat4 CatmullRomM = glm::make_mat4(catmullRomArray);
     glm::mat4 M;
     
-    if(!mode){
+    
+    float tt = 0.1;
+    glm :: vec4 TT(tt*tt*tt,tt*tt,tt,1);
+    glm :: vec4 CC = TT*B_SplinesM;
+    cout << glm :: to_string(CC)<<"\n";
+    
+    if(mode){
         M = B_SplinesM;
     }else{
         M = CatmullRomM;
     }
     
     
+    
+    //Third Section
     
     //shader Load
     Shader sd("../../../source/rotate.vs","../../../source/fShader.fs");
@@ -150,6 +178,8 @@ int main(int arg1, char ** arg2)
     //-----------------------------------------------------------------------
     sd.use();
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f,3000.0f);
+     //glm::mat4 projection = glm::ortho(-1000.0f, 1000.0f, -1000.0f, 1000.0f, 0.1f, 3000.0f);
+    ;
     sd.setMat4("projection", projection);
     
     sd_cube.use();
@@ -158,6 +188,7 @@ int main(int arg1, char ** arg2)
     glEnable(GL_DEPTH_TEST);
 
     
+    //Section Four
     //Set timeSlowRate to make the animation moving slower
     //-----------------------------------------------------------------------
     float timeSlowRate = 3;
@@ -223,22 +254,34 @@ int main(int arg1, char ** arg2)
                                 keyframeSet[frameIndex+1].getQuaternion(),
                                 keyframeSet[frameIndex+2].getQuaternion(),
                                 keyframeSet[frameIndex+3].getQuaternion()));
-              
             }
         }
+        
+        
         glm :: vec4 T(t*t*t,t*t,t,1);
         glm :: vec4 C = T*M;
+
         glm :: vec4 Qp = C*interPosition;
         glm :: vec4 Qo = C*interOrientation;
-        glm :: vec3 position(Qp.x,Qp.y,Qp.z);
+        glm :: vec3 position(Qp);
+        
         if(!eulerMode){
-         glm :: vec4 Qo = glm :: normalize(Qo);
+          Qo = glm :: normalize(Qo);
         }
         glm :: mat4 rotate = KeyFrame :: getRotationMatrix(Qo, eulerMode);
         glm :: mat4 model2 = glm::mat4(1.0);
                     model2 = glm::translate(model2, position);
                     model2 = model2*rotate;
+                cout << glm :: to_string(model2)<<"\n";
+        
+        float tt = 0.1;
+        glm :: vec4 TT(tt*tt*tt,tt*tt,tt,1);
+        glm :: vec4 CC = TT*B_SplinesM;
+        glm :: vec4 Q2 = CC*interOrientation;
 
+
+
+        
 
         
 
@@ -255,7 +298,7 @@ int main(int arg1, char ** arg2)
         //SET CAMERA VIEW HERE
         //-----------------------------------------------------------------------
         
-        view = glm::lookAt(glm::vec3(2000.0f, 100.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
         sd.setMat4("view", view);
         sd_cube.use();
         sd_cube.setMat4("view", view);
@@ -304,6 +347,16 @@ void processInput(GLFWwindow *window)
 {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+    
+    float cameraSpeed = 25.0;
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        cameraPos += cameraSpeed * cameraFront;
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        cameraPos -= cameraSpeed * cameraFront;
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
@@ -315,6 +368,37 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
-
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+    if(firstMouse)
+    {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+    
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos;
+    lastX = xpos;
+    lastY = ypos;
+    
+    float sensitivity = 0.05;
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
+    
+    yaw   += xoffset;
+    pitch += yoffset;
+    
+    if(pitch > 89.0f)
+        pitch = 89.0f;
+    if(pitch < -89.0f)
+        pitch = -89.0f;
+    
+    glm::vec3 front;
+    front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    front.y = sin(glm::radians(pitch));
+    front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    cameraFront = glm::normalize(front);
+}
 
 
