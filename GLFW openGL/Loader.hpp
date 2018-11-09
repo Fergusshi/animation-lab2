@@ -73,6 +73,7 @@ void  Loader :: load_obj(const char* filename, std::vector<glm::vec3> &vertices,
     }
     while(getline(in,newline)){
         
+        
         std::istringstream iss(newline);
         iss>>word;
         if(word =="v"){
@@ -81,30 +82,50 @@ void  Loader :: load_obj(const char* filename, std::vector<glm::vec3> &vertices,
             vertices.push_back(vertex);
         }
         else if(word =="f"){
-            replace(newline.begin(),newline.end(),'/',' ');
-            std::istringstream f_is(newline);
-            unsigned int vertexindice = 0;
-            int count = 0;
+            std::string fwordline;
             unsigned int a[4] ;
-            std::string temp;
-            f_is>>temp;
-            while(f_is>>vertexindice){
-                if(count%3 == 0){
-                    a[count/3] = vertexindice;
-                    
+            iss>>fwordline;
+            std::size_t found = fwordline.find('/');
+            if (found==std::string::npos){
+                std::istringstream f_is(newline);
+                char ch;
+                f_is>>ch;
+                f_is>>a[0]>>a[1]>>a[2];
+                vertexIndices.push_back(a[0]-1);
+                vertexIndices.push_back(a[1]-1);
+                vertexIndices.push_back(a[2]-1);
+                std::cout<<a[0]<<" "<<a[1]<<" "<<a[2]<<'\n';
+                if(!f_is.eof()){
+                    f_is>>a[3];
+                    vertexIndices.push_back(a[0]-1);
+                    vertexIndices.push_back(a[2]-1);
+                    vertexIndices.push_back(a[3]-1);
                 }
-                count++;
+                
             }
-            vertexIndices.push_back(a[0]);
-            vertexIndices.push_back(a[1]);
-            vertexIndices.push_back(a[2]);
-            if(count>=9){
+            else{
+                replace(newline.begin(),newline.end(),'/',' ');
+                std::istringstream f_is(newline);
+                std::string temp;
+                unsigned int vertexindice = 0;
+                int count = 0;
+                f_is>>temp;
+                while(f_is>>vertexindice){
+                    if(count%3 == 0){
+                        a[count/3] = vertexindice;
+                    }
+                    count++;
+                }
                 vertexIndices.push_back(a[0]);
+                vertexIndices.push_back(a[1]);
                 vertexIndices.push_back(a[2]);
-                vertexIndices.push_back(a[3]);
+                if(count>=9){
+                    vertexIndices.push_back(a[0]);
+                    vertexIndices.push_back(a[2]);
+                    vertexIndices.push_back(a[3]);
+                }
+                
             }
-            
-            
         }
         
     }

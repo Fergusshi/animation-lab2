@@ -14,6 +14,7 @@
 #include "Loader.hpp"
 #include <unistd.h>
 #include "KeyFrame.hpp"
+#include "Object.hpp"
 
 using namespace std;
 
@@ -118,7 +119,7 @@ int main(int arg1, char ** arg2)
     float tt = 0.1;
     glm :: vec4 TT(tt*tt*tt,tt*tt,tt,1);
     glm :: vec4 CC = TT*B_SplinesM;
-    cout << glm :: to_string(CC)<<"\n";
+   // cout << glm :: to_string(CC)<<"\n";
     
     if(mode){
         M = B_SplinesM;
@@ -133,19 +134,28 @@ int main(int arg1, char ** arg2)
     //shader Load
     Shader sd("../../../source/rotate.vs","../../../source/fShader.fs");
     Shader sd_cube("../../../source/cube.vs","../../../source/cube.fs");
-    
+    Shader sd_center("../../../source/center.vs","../../../source/center.fs");
+    Shader sd_body("../../../source/body.vs","../../../source/body.fs");
     
     //set VAO VBO
     vector< glm::vec3 > vertices_1;
     vector<unsigned int> indices_1;
     vector< glm::vec3 > vertices_cube;
     vector<unsigned int> indices_cube;
+    vector< glm::vec3 > vertices_plane;
+    vector<unsigned int> indices_plane;
+    vector< glm::vec3 > vertices_body;
+    vector<unsigned int> indices_body;
     std::vector<KeyFrame> keyframeSet;
-    Loader :: load_obj("../../../source/Lamborghini_Aventador.obj", vertices_1, indices_1);
+    Loader :: load_obj("../../../source/tinker.obj", vertices_1, indices_1);
     Loader :: load_obj("../../../source/cube.obj", vertices_cube, indices_cube);
+    Loader :: load_obj("../../../source/plane.obj", vertices_plane, indices_plane);
+    Loader :: load_obj("../../../source/body.obj", vertices_body, indices_body);
     Loader :: load_KeyFrame("../../../source/animation.kf", keyframeSet);
     
-    //Set VAO VBO for  Lamborghini
+
+    
+    //Set VAO VBO for  leg
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -157,6 +167,26 @@ int main(int arg1, char ** arg2)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,indices_1.size()*sizeof(unsigned int), &indices_1[0], GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_TRUE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    
+    unsigned int VBO_body, VAO_body, EBO_body;
+    glGenVertexArrays(1, &VAO_body);
+    glGenBuffers(1, &VBO_body);
+    glGenBuffers(1, &EBO_body);
+    glBindVertexArray(VAO_body);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_body);
+    glBufferData(GL_ARRAY_BUFFER, vertices_body.size()*sizeof(glm::vec3), &vertices_body[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO_body);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,indices_body.size()*sizeof(unsigned int), &indices_body[0], GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_TRUE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    
+    
+    
+    
+    
+    
+    
+    
     
   //Set VAO VBO for  Cube as control point
     unsigned int VBO_cube, VAO_cube, EBO_cube;
@@ -171,13 +201,25 @@ int main(int arg1, char ** arg2)
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_TRUE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     
+     //Set Plane
+    unsigned int VBO_plane, VAO_plane, EBO_plane;
+    glGenVertexArrays(1, &VAO_plane);
+    glGenBuffers(1, &VBO_plane);
+    glGenBuffers(1, &EBO_plane);
+    glBindVertexArray(VAO_plane);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_plane);
+    glBufferData(GL_ARRAY_BUFFER, vertices_plane.size()*sizeof(glm::vec3), &vertices_plane[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO_plane);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,indices_plane.size()*sizeof(unsigned int), &indices_plane[0], GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_TRUE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
     
     
 
     //SET Orthographic Projection Matrix  HERE
     //-----------------------------------------------------------------------
     sd.use();
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f,3000.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f,30000.0f);
      //glm::mat4 projection = glm::ortho(-1000.0f, 1000.0f, -1000.0f, 1000.0f, 0.1f, 3000.0f);
     ;
     sd.setMat4("projection", projection);
@@ -191,33 +233,18 @@ int main(int arg1, char ** arg2)
     //Section Four
     //Set timeSlowRate to make the animation moving slower
     //-----------------------------------------------------------------------
-    float timeSlowRate = 3;
+    float timeSlowRate = 4;
     float lastKeyEndingTime = 0;
     int frameIndex = 0;
     int totalIndex = keyframeSet.size()-3;
     glm :: mat4 interOrientation;
     glm :: mat4 interPosition;
-    interPosition =glm :: transpose(glm :: mat4
-                                    (glm::vec4(keyframeSet[frameIndex].position,0),
-                                     glm::vec4(keyframeSet[frameIndex+1].position,0),
-                                     glm::vec4(keyframeSet[frameIndex+2].position,0),
-                                     glm::vec4(keyframeSet[frameIndex+3].position,0)));
-   
-    if(eulerMode){
-        interOrientation = glm :: transpose(glm :: mat4(
-                                            keyframeSet[frameIndex].getEuler(),
-                                            keyframeSet[frameIndex+1].getEuler(),
-                                            keyframeSet[frameIndex+2].getEuler(),
-                                            keyframeSet[frameIndex+3].getEuler()));
-    }else{
-        interOrientation = glm :: transpose(glm :: mat4(
-                                      keyframeSet[frameIndex].getQuaternion(),
-                                      keyframeSet[frameIndex+1].getQuaternion(),
-                                      keyframeSet[frameIndex+2].getQuaternion(),
-                                      keyframeSet[frameIndex+3].getQuaternion()));
-    }
     
-
+    
+    
+   
+    float leg_len = 69.7f*4.0f;
+    int steps=0;
     
     // render loop
     // -----------
@@ -233,61 +260,58 @@ int main(int arg1, char ** arg2)
         if(t>1.0){
             lastKeyEndingTime = floor(currentTime/timeSlowRate)*timeSlowRate;
             t = (currentTime - lastKeyEndingTime)/timeSlowRate;
-            frameIndex++;
-            if(frameIndex>=totalIndex){
-                cout <<"the final frame is "<< frameIndex;
-                break;
-            }
-            cout << "current keyframe is "<<frameIndex<<"\n";
-            interPosition =glm :: transpose(glm :: mat4( glm::vec4(keyframeSet[frameIndex].position,0),
-                                      glm::vec4(keyframeSet[frameIndex+1].position,0),
-                                      glm::vec4(keyframeSet[frameIndex+2].position,0),
-                                      glm::vec4(keyframeSet[frameIndex+3].position,0)));
-            if(eulerMode){
-               interOrientation = glm :: transpose(glm :: mat4(keyframeSet[frameIndex].getEuler(),
-                                         keyframeSet[frameIndex+1].getEuler(),
-                                         keyframeSet[frameIndex+2].getEuler(),
-                                         keyframeSet[frameIndex+3].getEuler()));
-
-            }else{
-                interOrientation =glm :: transpose( glm ::mat4( keyframeSet[frameIndex].getQuaternion(),
-                                keyframeSet[frameIndex+1].getQuaternion(),
-                                keyframeSet[frameIndex+2].getQuaternion(),
-                                keyframeSet[frameIndex+3].getQuaternion()));
-            }
+            steps++;
+            if(steps==3)
+                steps=0;
         }
         
-        
-        glm :: vec4 T(t*t*t,t*t,t,1);
-        glm :: vec4 C = T*M;
-
-        glm :: vec4 Qp = C*interPosition;
-        glm :: vec4 Qo = C*interOrientation;
-        glm :: vec3 position(Qp);
-        
-        if(!eulerMode){
-          Qo = glm :: normalize(Qo);
-        }
-        glm :: mat4 rotate = KeyFrame :: getRotationMatrix(Qo, eulerMode);
-        glm :: mat4 model2 = glm::mat4(1.0);
-                    model2 = glm::translate(model2, position);
-                    model2 = model2*rotate;
-                cout << glm :: to_string(model2)<<"\n";
-        
-        float tt = 0.1;
-        glm :: vec4 TT(tt*tt*tt,tt*tt,tt,1);
-        glm :: vec4 CC = TT*B_SplinesM;
-        glm :: vec4 Q2 = CC*interOrientation;
-
-
-
-        
-
-        
-
-        sd.use();
+        glm::vec4 Qrotation=glm::vec4(-0.707,0.0,0.0,0.707);
         glm::mat4 model = glm::mat4(1.0);
-        glm::mat4 model1 = glm::translate(model, glm::vec3(500.0f, 0.0f, 0.0f));
+        glm::mat4 modelcube = glm::mat4(1.0);
+        glm::mat4 model_right_leg = glm::translate(model, glm::vec3(0.0f,-leg_len, -100.0f))* KeyFrame :: getRotationMatrix(Qrotation, 0);
+        glm::mat4 model_left_leg =glm::translate(model, glm::vec3(0.0f,-leg_len, -100.0f))* KeyFrame :: getRotationMatrix(Qrotation, 0);
+        glm::vec4 leg_forward=glm::vec4(-0.259,0.0,0.0,0.966);
+        glm::vec4 leg_backward=glm::vec4(0.259,0.0,0.0,0.966);
+        
+        
+        glm::vec4 leg_left_pos;
+        glm::vec4 leg_right_pos;
+        float stand =leg_len*0.9;
+        float walk = 0.866f*leg_len*0.9;
+        
+        if(t<0.5){
+            leg_left_pos = leg_forward*2.0f*t+leg_backward*2.0f*(0.5f-t);
+            leg_right_pos = leg_backward*2.0f*t+leg_forward*2.0f*(0.5f-t);
+        }else{
+            leg_left_pos = leg_backward*2.0f*(t-0.5f)+leg_forward*2.0f*(1.0f-t);
+            leg_right_pos = leg_forward*2.0f*(t-0.5f)+leg_backward*2.0f*(1.0f-t);
+        }
+        model_left_leg = glm::translate(model, glm::vec3(75.0f,40.0f, 50.0f))*KeyFrame :: getRotationMatrix(glm::normalize(leg_left_pos), 0)*model_left_leg;
+        model_right_leg = glm::translate(model, glm::vec3(-125.0f,40.0f, 50.0f))*KeyFrame :: getRotationMatrix(glm::normalize(leg_right_pos), 0)*model_right_leg;
+        
+        
+
+       // body tran
+        float t0 = fmodf(t,0.25f);
+        int temp = int(t/0.25f);
+        float bodyheight;
+        if(temp%2==0){
+            bodyheight = t0/0.25f*stand+(1.0f-t0/0.25f)*walk;
+        }else{
+            bodyheight = t0/0.25f*walk+(1.0f-t0/0.25f)*stand;
+        }
+        std::cout<<t0<<" "<<temp<<" "<<bodyheight<<"\n";
+        glm :: mat4 bodyMatrix = glm::translate(model, glm::vec3(0.0f,bodyheight, 2*(t+steps)*leg_len-1000.0));
+        glm::mat4 bodyModel = glm::mat4(1.0);
+        bodyModel = bodyMatrix*bodyModel;
+        model_left_leg =bodyMatrix*model_left_leg;
+        model_right_leg =bodyMatrix*model_right_leg;
+        
+
+
+
+
+
         glm::mat4 view;
         float radius = 2000.0f;
         //float camX   = sin(glfwGetTime()) * radius;
@@ -297,41 +321,71 @@ int main(int arg1, char ** arg2)
         
         //SET CAMERA VIEW HERE
         //-----------------------------------------------------------------------
-        
+        sd.use();
         view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
         sd.setMat4("view", view);
         sd_cube.use();
         sd_cube.setMat4("view", view);
         
         sd.use();
-        sd.setMat4("model", model);
+        sd.setMat4("model", model_left_leg);
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         glBindVertexArray(VAO);
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glDrawElements(GL_TRIANGLES, indices_1.size(), GL_UNSIGNED_INT, 0);
+        sd.setMat4("model", model_right_leg);
+        glDrawElements(GL_TRIANGLES, indices_1.size(), GL_UNSIGNED_INT, 0);
+       // sd.use();
+       // sd.setMat4("model", model1);
        // glDrawElements(GL_TRIANGLES, indices_1.size(), GL_UNSIGNED_INT, 0);
         
-       // sd.use();
-        //sd.setMat4("model", model1);
-        //glDrawElements(GL_TRIANGLES, indices_1.size(), GL_UNSIGNED_INT, 0);
         
         sd.use();
-        sd.setMat4("model", model2);
-        glDrawElements(GL_TRIANGLES, indices_1.size(), GL_UNSIGNED_INT, 0);
+        //sd.setMat4("model", model2);
+        //glDrawElements(GL_TRIANGLES, indices_1.size(), GL_UNSIGNED_INT, 0);
         
+        
+        glBindVertexArray(VAO_plane);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO_plane);
+        sd_cube.use();
+        sd_cube.setMat4("model", modelcube);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        glDrawElements(GL_TRIANGLES, indices_plane.size(), GL_UNSIGNED_INT, 0);
+
         
         glBindVertexArray(VAO_cube);
         glBindBuffer(GL_ARRAY_BUFFER, VBO_cube);
-        sd_cube.use();
-        for(int i = 0; i<keyframeSet.size();i++){
-        glm::mat4 model = glm::mat4(1.0);
-        model = glm::translate(model, keyframeSet[i].position);
-        model =model*keyframeSet[i].getThisRotationMatrix(eulerMode);
-            
-        sd_cube.use();
-        sd_cube.setMat4("model", model);
+        sd_center.use();
+        glm::mat4 worldCenterModel = glm::mat4(1.0);
+        sd_center.setMat4("model", worldCenterModel);
+        sd_center.setMat4("view", view);
+        sd_center.setMat4("projection", projection);
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         glDrawElements(GL_TRIANGLES, indices_cube.size(), GL_UNSIGNED_INT, 0);
-        }
+        
+        glBindVertexArray(VAO_body);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO_body);
+        sd_body.use();
+        sd_center.setMat4("model", bodyModel);
+        sd_center.setMat4("view", view);
+        sd_center.setMat4("projection", projection);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        glDrawElements(GL_TRIANGLES, indices_body.size(), GL_UNSIGNED_INT, 0);
+        
+        
+        
+        
+//        for(int i = 0; i<keyframeSet.size();i++){
+//        glm::mat4 model = glm::mat4(1.0);
+//        model = glm::translate(model, keyframeSet[i].position);
+//        model =model*keyframeSet[i].getThisRotationMatrix(eulerMode);
+//
+//        sd_cube.use();
+//        sd_cube.setMat4("model", model);
+//        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+//        glDrawElements(GL_TRIANGLES, indices_cube.size(), GL_UNSIGNED_INT, 0);
+//        }
+        
         glfwSwapBuffers(window);
         glfwPollEvents();
     }

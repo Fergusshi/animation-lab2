@@ -27,7 +27,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		F710E80D215BD15F007E09E7 /* GLFW openGL */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "GLFW openGL"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F710E80D215BD15F007E09E7 /* lab2 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = lab2; sourceTree = BUILT_PRODUCTS_DIR; };
 		F710E810215BD15F007E09E7 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		F710E818215BD461007E09E7 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		F710E81A215BD57B007E09E7 /* libGLEW.2.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.1.0.dylib; path = ../../../../usr/local/Cellar/glew/2.1.0/lib/libGLEW.2.1.0.dylib; sourceTree = "<group>"; };
@@ -38,6 +38,7 @@
 		F744B1AD2161C6A700258D40 /* KeyFrame.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = KeyFrame.hpp; sourceTree = "<group>"; };
 		F744B1B02161D10D00258D40 /* Loader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Loader.hpp; sourceTree = "<group>"; };
 		F744B1B32161E5A700258D40 /* Interpolation.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Interpolation.hpp; sourceTree = "<group>"; };
+		F7ED2E54218CB3B10094508D /* Object.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Object.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,7 +67,7 @@
 		F710E80E215BD15F007E09E7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F710E80D215BD15F007E09E7 /* GLFW openGL */,
+				F710E80D215BD15F007E09E7 /* lab2 */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -76,6 +77,7 @@
 			children = (
 				F744B1AD2161C6A700258D40 /* KeyFrame.hpp */,
 				F710E810215BD15F007E09E7 /* main.cpp */,
+				F7ED2E54218CB3B10094508D /* Object.hpp */,
 				F744B1B32161E5A700258D40 /* Interpolation.hpp */,
 				F744B1B02161D10D00258D40 /* Loader.hpp */,
 				F710E824215DB5BE007E09E7 /* ShaderLoader.h */,
@@ -98,9 +100,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		F710E80C215BD15F007E09E7 /* GLFW openGL */ = {
+		F710E80C215BD15F007E09E7 /* lab2 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F710E814215BD15F007E09E7 /* Build configuration list for PBXNativeTarget "GLFW openGL" */;
+			buildConfigurationList = F710E814215BD15F007E09E7 /* Build configuration list for PBXNativeTarget "lab2" */;
 			buildPhases = (
 				F710E809215BD15F007E09E7 /* Sources */,
 				F710E80A215BD15F007E09E7 /* Frameworks */,
@@ -110,9 +112,9 @@
 			);
 			dependencies = (
 			);
-			name = "GLFW openGL";
+			name = lab2;
 			productName = "GLFW openGL";
-			productReference = F710E80D215BD15F007E09E7 /* GLFW openGL */;
+			productReference = F710E80D215BD15F007E09E7 /* lab2 */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -129,7 +131,7 @@
 					};
 				};
 			};
-			buildConfigurationList = F710E808215BD15F007E09E7 /* Build configuration list for PBXProject "GLFW openGL" */;
+			buildConfigurationList = F710E808215BD15F007E09E7 /* Build configuration list for PBXProject "lab2" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -141,7 +143,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				F710E80C215BD15F007E09E7 /* GLFW openGL */,
+				F710E80C215BD15F007E09E7 /* lab2 */,
 			);
 		};
 /* End PBXProject section */
@@ -303,7 +305,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F710E808215BD15F007E09E7 /* Build configuration list for PBXProject "GLFW openGL" */ = {
+		F710E808215BD15F007E09E7 /* Build configuration list for PBXProject "lab2" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F710E812215BD15F007E09E7 /* Debug */,
@@ -312,7 +314,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F710E814215BD15F007E09E7 /* Build configuration list for PBXNativeTarget "GLFW openGL" */ = {
+		F710E814215BD15F007E09E7 /* Build configuration list for PBXNativeTarget "lab2" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F710E815215BD15F007E09E7 /* Debug */,
