@@ -30,7 +30,7 @@ const unsigned int SCR_HEIGHT = 600;
 
 const float BALL_RADIUS=50.0;
 const float EnergyLossRate = 0.6;
-float gravity = -100.0;
+float gravity = -300.0;
 
 glm::vec3 cameraPos   = glm::vec3(0.0f, 100.0f, 2000.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -113,8 +113,9 @@ int main(int arg1, char ** arg2)
     Shader sd("../../../source/rotate.vs","../../../source/fShader.fs");
     Shader sd_cube("../../../source/cube.vs","../../../source/cube.fs");
     Shader sd_center("../../../source/center.vs","../../../source/center.fs");
-    Shader sd_ball1("../../../source/rotate.vs","../../../source/center.fs");
+    Shader sd_ball1("../../../source/ball.vs","../../../source/center.fs");
     Shader sd_body("../../../source/body.vs","../../../source/body.fs");
+
     
     //set VAO VBO
     vector< glm::vec3 > vertices_1;
@@ -230,16 +231,10 @@ int main(int arg1, char ** arg2)
     float lastKeyEndingTime = 0;
     
     
-
-    
-
-    int steps=0;
-    
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
     {
-        cout<<all_objects.size()<<"\n";
         processInput(window);
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -294,10 +289,10 @@ int main(int arg1, char ** arg2)
                 object->updateanVelocity();
             }
             
-            if (object->positionMatrix[3][1] <= BALL_RADIUS && object->velocity.y < 0){
+            if (object->positionMatrix[3][1] <= BALL_RADIUS && object->velocity.y <= 0){
                 if (abs(object->velocity.y) < 0.1) {
                     // if the velocity is smaller than threshold
-                    object->setVelocity(object->velocity * glm::vec3(1.0,0.0,1.0));
+                    object->setVelocity(object->velocity * glm::vec3(0.5,0.0,0.5));
                     object->updateanVelocity();
                     object->positionMatrix[3][1] = BALL_RADIUS;
                 }else{
@@ -327,18 +322,20 @@ int main(int arg1, char ** arg2)
             // move the object based on the velocity and then draw
             
             object->positionMatrix[3][0] += t * object->velocity.x;
-            object->positionMatrix[3][1] += t * object->velocity.y + 1/2*gravity*t*t;
+            object->positionMatrix[3][1] += t * object->velocity.y;
+            if(object->positionMatrix[3][1]>0)
+                object->positionMatrix[3][1] +=1/2*gravity*t*t;
             object->positionMatrix[3][2] += t * object->velocity.z;
             
             object->rotationMatrix =object->rotationMatrix * KeyFrame::getRotationMatrix(phyformula::AngularVelocityToQuaternion(object->anvelocity,t),0);
             
             glm::mat4 Model1 = object->positionMatrix * object->rotationMatrix;
             
-            
-            object->sd_ball1->use();
-            object->sd_ball1->setMat4("view", view);
-            object->sd_ball1->setMat4("projection", projection);
-            object->sd_ball1->setMat4("model", Model1);
+         //   std::cout<<object->positionMatrix[3][0]<<' '<<object->positionMatrix[3][1]<<' '<<object->positionMatrix[3][2]<<"\n";
+            sd_ball1.use();
+            sd_ball1.setMat4("view", view);
+            sd_ball1.setMat4("projection", projection);
+            sd_ball1.setMat4("model", Model1);
             object->draw();
         }
 
@@ -396,15 +393,7 @@ int main(int arg1, char ** arg2)
         glDrawElements(GL_TRIANGLES, indices_cube.size(), GL_UNSIGNED_INT, 0);
         
         
-        glm::mat4 ballModel_1 = glm::translate(model, glm::vec3(0.0f,10.0f, 0.0f));
-        glBindVertexArray(VAO_ball1);
-        glBindBuffer(GL_ARRAY_BUFFER, VBO_ball1);
-        sd_ball1.use();
-        sd_ball1.setMat4("model", ballModel_1);
-        sd_ball1.setMat4("view", view);
-        sd_ball1.setMat4("projection", projection);
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-       // glDrawElements(GL_TRIANGLES, indices_ball1.size(), GL_UNSIGNED_INT, 0);
+
         
         
         

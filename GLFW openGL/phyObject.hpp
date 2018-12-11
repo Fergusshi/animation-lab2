@@ -67,7 +67,7 @@ void phyObject :: setVelocity(glm :: vec3 v){
 
 void phyObject :: updateanVelocity(){
     glm::vec3 temp = glm::vec3(this->velocity.z,0.0,-this->velocity.x);
-    float rate = 1.0;
+    float rate = 0.01;
     this->anvelocity = glm::vec4(temp,glm::length(temp)*rate);
 }
 

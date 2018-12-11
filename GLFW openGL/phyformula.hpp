@@ -32,17 +32,16 @@ void phyformula :: velocityCaculate(phyObject *objectA, phyObject *objectB){
 
 glm::vec4 phyformula :: AngularVelocityToQuaternion (glm::vec4 anvelocity, float deltaTime)
 {
-    
+    glm :: vec3 temp = glm :: normalize(glm::vec3(anvelocity));
     float v = deltaTime * anvelocity.w * 0.5f;
     float q = cos(v);
-    float s = sin(v) / anvelocity.w;
+    float s = sin(v);
     
     glm::vec4 integrated;
     integrated.w = q;
-    integrated.x = s * anvelocity.x;
-    integrated.y = s * anvelocity.y;
-    integrated.z = s * anvelocity.z;
-    
+    integrated.x = s * temp.x;
+    integrated.y = s * temp.y;
+    integrated.z = s * temp.z;
     return glm :: normalize(integrated);
 
 }
