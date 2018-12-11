@@ -94,7 +94,7 @@ void  Loader :: load_obj(const char* filename, std::vector<glm::vec3> &vertices,
                 vertexIndices.push_back(a[0]-1);
                 vertexIndices.push_back(a[1]-1);
                 vertexIndices.push_back(a[2]-1);
-                std::cout<<a[0]<<" "<<a[1]<<" "<<a[2]<<'\n';
+   //             std::cout<<a[0]<<" "<<a[1]<<" "<<a[2]<<'\n';
                 if(!f_is.eof()){
                     f_is>>a[3];
                     vertexIndices.push_back(a[0]-1);

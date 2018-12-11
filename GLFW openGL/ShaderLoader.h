@@ -24,7 +24,7 @@ class Shader
 public:
     // 程序ID
     unsigned int ID;
-    
+    Shader(){}
     // 构造器读取并构建着色器
     Shader(const GLchar* vertexPath, const GLchar* fragmentPath);
     // 使用/激活程序
@@ -34,6 +34,7 @@ public:
     void setInt(const std::string &name, int value) const;
     void setFloat(const std::string &name, float value) const;
     void setMat4(const std::string &name, const glm::mat4 &mat) const;
+    void setColor(const std::string &name, const glm::vec4 &mat) const;
 };
 
 #endif /* ShaderLoader_h */
