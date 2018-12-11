@@ -25,7 +25,6 @@ public:
     glm :: vec3 Hvelocity;
     std:: vector< glm::vec3 > vertices_ball1;
     std:: vector<unsigned int> indices_ball1;
-    Shader* sd_ball1;
 
     unsigned int VBO_ball1,VAO_ball1,EBO_ball1;
     
@@ -41,7 +40,6 @@ public:
         glm::vec3 temp = glm::vec3(this->velocity.z,0.0,-this->velocity.x);
         float rate = 1.0;
         this->anvelocity = glm::vec4(temp,glm::length(temp)*rate);
-        this->sd_ball1 = new Shader("../../../source/ball.vs","../../../source/center.fs");
         Loader :: load_obj("../../../source/beachball.obj", vertices_ball1, indices_ball1);
         glGenVertexArrays(1, &VAO_ball1);
         glGenBuffers(1, &VAO_ball1);

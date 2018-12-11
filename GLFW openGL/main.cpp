@@ -249,7 +249,7 @@ int main(int arg1, char ** arg2)
         for(int i = 0; i<all_objects.size();i++){
             auto object = all_objects[i];
             
-            for(int j = i+1;j<all_objects.size();j++){
+           for(int j = i+1;j<all_objects.size();j++){
                 glm::vec3 center1(all_objects[i]->positionMatrix[3]);
                 glm::vec3 center2(all_objects[j]->positionMatrix[3]);
                 glm::vec3 c2_to_c1 = center1 - center2;
@@ -312,7 +312,7 @@ int main(int arg1, char ** arg2)
             
             
         }
-        
+      
         glm::mat4 view;
         view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
         
@@ -367,10 +367,9 @@ int main(int arg1, char ** arg2)
         
         //SET CAMERA VIEW HERE
         //-----------------------------------------------------------------------
-        sd.use();
-        sd.setMat4("view", view);
-        sd_cube.use();
-        sd_cube.setMat4("view", view);
+
+
+
         
 
        // sd.use();
@@ -388,6 +387,7 @@ int main(int arg1, char ** arg2)
         glm :: mat4 model = glm::mat4(1.0);
         sd_cube.use();
         sd_cube.setMat4("model", model);
+        sd_cube.setMat4("view", view);
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         glDrawElements(GL_TRIANGLES, indices_plane.size(), GL_UNSIGNED_INT, 0);
 
@@ -400,7 +400,7 @@ int main(int arg1, char ** arg2)
         sd_center.setMat4("view", view);
         sd_center.setMat4("projection", projection);
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-        glDrawElements(GL_TRIANGLES, indices_cube.size(), GL_UNSIGNED_INT, 0);
+     //   glDrawElements(GL_TRIANGLES, indices_cube.size(), GL_UNSIGNED_INT, 0);
         
         
 
