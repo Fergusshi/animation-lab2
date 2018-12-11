@@ -140,29 +140,29 @@ int main(int arg1, char ** arg2)
 
     
     //Set VAO VBO for  leg
-    unsigned int VBO, VAO, EBO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, vertices_1.size()*sizeof(glm::vec3), &vertices_1[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,indices_1.size()*sizeof(unsigned int), &indices_1[0], GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_TRUE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
+//    unsigned int VBO, VAO, EBO;
+//    glGenVertexArrays(1, &VAO);
+//    glGenBuffers(1, &VBO);
+//    glGenBuffers(1, &EBO);
+//    glBindVertexArray(VAO);
+//    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+//    glBufferData(GL_ARRAY_BUFFER, vertices_1.size()*sizeof(glm::vec3), &vertices_1[0], GL_STATIC_DRAW);
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+//    glBufferData(GL_ELEMENT_ARRAY_BUFFER,indices_1.size()*sizeof(unsigned int), &indices_1[0], GL_STATIC_DRAW);
+//    glVertexAttribPointer(0, 3, GL_FLOAT, GL_TRUE, 3 * sizeof(float), (void*)0);
+//    glEnableVertexAttribArray(0);
     
-    unsigned int VBO_body, VAO_body, EBO_body;
-    glGenVertexArrays(1, &VAO_body);
-    glGenBuffers(1, &VBO_body);
-    glGenBuffers(1, &EBO_body);
-    glBindVertexArray(VAO_body);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO_body);
-    glBufferData(GL_ARRAY_BUFFER, vertices_body.size()*sizeof(glm::vec3), &vertices_body[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO_body);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,indices_body.size()*sizeof(unsigned int), &indices_body[0], GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_TRUE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
+//    unsigned int VBO_body, VAO_body, EBO_body;
+//    glGenVertexArrays(1, &VAO_body);
+//    glGenBuffers(1, &VBO_body);
+//    glGenBuffers(1, &EBO_body);
+//    glBindVertexArray(VAO_body);
+//    glBindBuffer(GL_ARRAY_BUFFER, VBO_body);
+//    glBufferData(GL_ARRAY_BUFFER, vertices_body.size()*sizeof(glm::vec3), &vertices_body[0], GL_STATIC_DRAW);
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO_body);
+//    glBufferData(GL_ELEMENT_ARRAY_BUFFER,indices_body.size()*sizeof(unsigned int), &indices_body[0], GL_STATIC_DRAW);
+//    glVertexAttribPointer(0, 3, GL_FLOAT, GL_TRUE, 3 * sizeof(float), (void*)0);
+//    glEnableVertexAttribArray(0);
     
     //vao of ball
     unsigned int VBO_ball1, VAO_ball1, EBO_ball1;
@@ -248,22 +248,29 @@ int main(int arg1, char ** arg2)
         
         for(int i = 0; i<all_objects.size();i++){
             auto object = all_objects[i];
-            
+
            for(int j = i+1;j<all_objects.size();j++){
                 glm::vec3 center1(all_objects[i]->positionMatrix[3]);
                 glm::vec3 center2(all_objects[j]->positionMatrix[3]);
                 glm::vec3 c2_to_c1 = center1 - center2;
-                
+               
+
                 if (glm::length(c2_to_c1) >= 2.0 * BALL_RADIUS) continue;
-                
+                c2_to_c1 = glm:: normalize(c2_to_c1);
                 // for perfect elastic collision velocity will swap
-                glm ::vec3 tempvec =all_objects[i]->velocity;
-                all_objects[i]->setVelocity(all_objects[j]->velocity);
-                all_objects[j]->setVelocity(tempvec);
+                glm :: vec3 tempvec1 =all_objects[i]->velocity;
+                glm :: vec3 tempvec2 =all_objects[j]->velocity;
+                glm :: vec3 normalv1 = glm::dot(tempvec1,c2_to_c1)*(c2_to_c1);
+                glm :: vec3 normalv2 = glm::dot(tempvec2,c2_to_c1)*(c2_to_c1);
+                glm :: vec3 resultv1 = normalv2 + tempvec1 - normalv1;
+                glm :: vec3 resultv2 = normalv1 + tempvec2 - normalv2;
+               
+                all_objects[i]->setVelocity(resultv1);
+                all_objects[j]->setVelocity(resultv2);
                 all_objects[i]->updateanVelocity();
                 all_objects[j]->updateanVelocity();
-                
-                
+
+
 
             }
             if (object->positionMatrix[3][0] <= -1000 + BALL_RADIUS && object->velocity.x < 0) {
@@ -271,25 +278,25 @@ int main(int arg1, char ** arg2)
                 object->setVelocity(object->velocity*contact_normal);
                 object->updateanVelocity();
             }
-            
+
             if (object->positionMatrix[3][0] >= 1000 - BALL_RADIUS && object->velocity.x > 0) {
                 glm::vec3 contact_normal(-EnergyLossRate, 1.0, 1.0);
                 object->setVelocity(object->velocity*contact_normal);
                 object->updateanVelocity();
             }
-            
+
             if (object->positionMatrix[3][2] <= -1000 + BALL_RADIUS && object->velocity.z < 0) {
                 glm::vec3 contact_normal(1.0, 1.0,-EnergyLossRate);
                 object->setVelocity(object->velocity*contact_normal);
                 object->updateanVelocity();
             }
-            
+
             if (object->positionMatrix[3][2] >= 1000 - BALL_RADIUS && object->velocity.z > 0) {
                 glm::vec3 contact_normal(1.0, 1.0,-EnergyLossRate);
                 object->setVelocity(object->velocity*contact_normal);
                 object->updateanVelocity();
             }
-            
+
             if (object->positionMatrix[3][1] <= BALL_RADIUS && object->velocity.y <= 0){
                 if (abs(object->velocity.y) < 0.1) {
                     // if the velocity is smaller than threshold
@@ -307,10 +314,10 @@ int main(int arg1, char ** arg2)
                 v1.y += gravity*t;
                 object->setVelocity(v1);
                 object->updateanVelocity();
-                
+
             }
-            
-            
+
+
         }
       
         glm::mat4 view;
@@ -325,7 +332,7 @@ int main(int arg1, char ** arg2)
             object->positionMatrix[3][0] += t * object->velocity.x;
             object->positionMatrix[3][1] += t * object->velocity.y;
             if(object->positionMatrix[3][1]>0)
-                object->positionMatrix[3][1] +=1/2*gravity*t*t;
+                object->positionMatrix[3][1] -=1/2*gravity*t*t;
             object->positionMatrix[3][2] += t * object->velocity.z;
             
             object->rotationMatrix =object->rotationMatrix * KeyFrame::getRotationMatrix(phyformula::AngularVelocityToQuaternion(object->anvelocity,t),0);

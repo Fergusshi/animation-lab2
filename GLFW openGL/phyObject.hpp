@@ -42,10 +42,10 @@ public:
         this->anvelocity = glm::vec4(temp,glm::length(temp)*rate);
         Loader :: load_obj("../../../source/beachball.obj", vertices_ball1, indices_ball1);
         glGenVertexArrays(1, &VAO_ball1);
-        glGenBuffers(1, &VAO_ball1);
+        glGenBuffers(1, &VBO_ball1);
         glGenBuffers(1, &EBO_ball1);
         glBindVertexArray(VAO_ball1);
-        glBindBuffer(GL_ARRAY_BUFFER, VAO_ball1);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO_ball1);
         glBufferData(GL_ARRAY_BUFFER, vertices_ball1.size()*sizeof(glm::vec3), &vertices_ball1[0], GL_STATIC_DRAW);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO_ball1);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER,indices_ball1.size()*sizeof(unsigned int), &indices_ball1[0], GL_STATIC_DRAW);
