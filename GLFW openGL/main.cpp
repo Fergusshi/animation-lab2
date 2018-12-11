@@ -42,6 +42,7 @@ float pitch =  0.0f;
 float lastX =  800.0f / 2.0;
 float lastY =  600.0 / 2.0;
 float fov   =  45.0f;
+bool addball = false;
 
 std::vector<phyObject*> all_objects;
 
@@ -230,6 +231,7 @@ int main(int arg1, char ** arg2)
     float timeSlowRate = 1;
     float lastKeyEndingTime = 0;
     
+
     
     // render loop
     // -----------
@@ -262,7 +264,6 @@ int main(int arg1, char ** arg2)
                 all_objects[j]->updateanVelocity();
                 
                 
-                auto c2_to_v1_normalized = glm::normalize(c2_to_c1);
 
             }
             if (object->positionMatrix[3][0] <= -1000 + BALL_RADIUS && object->velocity.x < 0) {
@@ -340,10 +341,19 @@ int main(int arg1, char ** arg2)
         }
 
         
+
+        if(addball){
+            glm::vec3 position=cameraPos;
+            glm::vec3 direction=cameraFront;
+            position+= direction*50.0f;
+            glm::mat4 model = glm::mat4(1.0);
+            glm::mat4 positionMat = glm::translate(model, position);
+            glm::vec3 velocity = 300.0f * direction;
+            phyObject *ball = new phyObject(positionMat,model,velocity);
+            all_objects.push_back(ball);
+            addball = false;
         
-        
-        
-        
+        }
         
         
         
@@ -423,6 +433,7 @@ int main(int arg1, char ** arg2)
 
 float currentpresstime=0;
 float lastpresstime=0;
+
 void processInput(GLFWwindow *window)
 {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -439,17 +450,9 @@ void processInput(GLFWwindow *window)
         cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS){
         currentpresstime =glfwGetTime();
-        if(currentpresstime - lastpresstime>0.15){
-            lastpresstime = currentpresstime;
-            glm::vec3 position=cameraPos;
-            glm::vec3 direction=cameraFront;
-            position+= direction*50.0f;
-            glm::mat4 model = glm::mat4(1.0);
-            glm::mat4 positionMat = glm::translate(model, position);
-            glm::vec3 velocity = 300.0f * direction;
-            phyObject *ball = new phyObject(positionMat,model,velocity);
-            all_objects.push_back(ball);
-            
+        if(currentpresstime-lastpresstime>0.15){
+                addball = true;
+                lastpresstime = currentpresstime;
             
         }
     }
