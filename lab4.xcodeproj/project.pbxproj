@@ -27,7 +27,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		F710E80D215BD15F007E09E7 /* lab3 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = lab3; sourceTree = BUILT_PRODUCTS_DIR; };
+		F710E80D215BD15F007E09E7 /* lab4 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = lab4; sourceTree = BUILT_PRODUCTS_DIR; };
 		F710E810215BD15F007E09E7 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		F710E818215BD461007E09E7 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		F710E81A215BD57B007E09E7 /* libGLEW.2.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.1.0.dylib; path = ../../../../usr/local/Cellar/glew/2.1.0/lib/libGLEW.2.1.0.dylib; sourceTree = "<group>"; };
@@ -69,7 +69,7 @@
 		F710E80E215BD15F007E09E7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F710E80D215BD15F007E09E7 /* lab3 */,
+				F710E80D215BD15F007E09E7 /* lab4 */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -104,9 +104,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		F710E80C215BD15F007E09E7 /* lab3 */ = {
+		F710E80C215BD15F007E09E7 /* lab4 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F710E814215BD15F007E09E7 /* Build configuration list for PBXNativeTarget "lab3" */;
+			buildConfigurationList = F710E814215BD15F007E09E7 /* Build configuration list for PBXNativeTarget "lab4" */;
 			buildPhases = (
 				F710E809215BD15F007E09E7 /* Sources */,
 				F710E80A215BD15F007E09E7 /* Frameworks */,
@@ -116,9 +116,9 @@
 			);
 			dependencies = (
 			);
-			name = lab3;
+			name = lab4;
 			productName = "GLFW openGL";
-			productReference = F710E80D215BD15F007E09E7 /* lab3 */;
+			productReference = F710E80D215BD15F007E09E7 /* lab4 */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -135,7 +135,7 @@
 					};
 				};
 			};
-			buildConfigurationList = F710E808215BD15F007E09E7 /* Build configuration list for PBXProject "lab3" */;
+			buildConfigurationList = F710E808215BD15F007E09E7 /* Build configuration list for PBXProject "lab4" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -147,7 +147,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				F710E80C215BD15F007E09E7 /* lab3 */,
+				F710E80C215BD15F007E09E7 /* lab4 */,
 			);
 		};
 /* End PBXProject section */
@@ -309,7 +309,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F710E808215BD15F007E09E7 /* Build configuration list for PBXProject "lab3" */ = {
+		F710E808215BD15F007E09E7 /* Build configuration list for PBXProject "lab4" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F710E812215BD15F007E09E7 /* Debug */,
@@ -318,7 +318,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F710E814215BD15F007E09E7 /* Build configuration list for PBXNativeTarget "lab3" */ = {
+		F710E814215BD15F007E09E7 /* Build configuration list for PBXNativeTarget "lab4" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F710E815215BD15F007E09E7 /* Debug */,

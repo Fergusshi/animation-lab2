@@ -43,8 +43,14 @@ float lastX =  800.0f / 2.0;
 float lastY =  600.0 / 2.0;
 float fov   =  45.0f;
 bool addball = false;
+float boundry = 3000.0;
+bool update_blackhole = false;
+bool addairbus = false;
+
+glm :: vec3 blackhole;
 
 std::vector<phyObject*> all_objects;
+std::vector<phyObject*> all_fly_objects;
 
 
 
@@ -96,25 +102,12 @@ int main(int arg1, char ** arg2)
         return -1;
     }
     
-
-    
-    
-    
-    //Second Section
-    
-    
-
-   
-    
-    
-    
-    //Third Section
     
     //shader Load
     Shader sd("../../../source/rotate.vs","../../../source/fShader.fs");
     Shader sd_cube("../../../source/cube.vs","../../../source/cube.fs");
     Shader sd_center("../../../source/center.vs","../../../source/center.fs");
-    Shader sd_ball1("../../../source/ball.vs","../../../source/center.fs");
+    Shader sd_ball1("../../../source/ball.vs","../../../source/fShader.fs");
     Shader sd_body("../../../source/body.vs","../../../source/body.fs");
 
     
@@ -137,32 +130,6 @@ int main(int arg1, char ** arg2)
     Loader :: load_obj("../../../source/beachball.obj", vertices_ball1, indices_ball1);
     Loader :: load_KeyFrame("../../../source/animation.kf", keyframeSet);
     
-
-    
-    //Set VAO VBO for  leg
-//    unsigned int VBO, VAO, EBO;
-//    glGenVertexArrays(1, &VAO);
-//    glGenBuffers(1, &VBO);
-//    glGenBuffers(1, &EBO);
-//    glBindVertexArray(VAO);
-//    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-//    glBufferData(GL_ARRAY_BUFFER, vertices_1.size()*sizeof(glm::vec3), &vertices_1[0], GL_STATIC_DRAW);
-//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-//    glBufferData(GL_ELEMENT_ARRAY_BUFFER,indices_1.size()*sizeof(unsigned int), &indices_1[0], GL_STATIC_DRAW);
-//    glVertexAttribPointer(0, 3, GL_FLOAT, GL_TRUE, 3 * sizeof(float), (void*)0);
-//    glEnableVertexAttribArray(0);
-    
-//    unsigned int VBO_body, VAO_body, EBO_body;
-//    glGenVertexArrays(1, &VAO_body);
-//    glGenBuffers(1, &VBO_body);
-//    glGenBuffers(1, &EBO_body);
-//    glBindVertexArray(VAO_body);
-//    glBindBuffer(GL_ARRAY_BUFFER, VBO_body);
-//    glBufferData(GL_ARRAY_BUFFER, vertices_body.size()*sizeof(glm::vec3), &vertices_body[0], GL_STATIC_DRAW);
-//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO_body);
-//    glBufferData(GL_ELEMENT_ARRAY_BUFFER,indices_body.size()*sizeof(unsigned int), &indices_body[0], GL_STATIC_DRAW);
-//    glVertexAttribPointer(0, 3, GL_FLOAT, GL_TRUE, 3 * sizeof(float), (void*)0);
-//    glEnableVertexAttribArray(0);
     
     //vao of ball
     unsigned int VBO_ball1, VAO_ball1, EBO_ball1;
@@ -176,11 +143,6 @@ int main(int arg1, char ** arg2)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,indices_ball1.size()*sizeof(unsigned int), &indices_ball1[0], GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_TRUE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-    
-    
-    
-    
-    
     
     
   //Set VAO VBO for  Cube as control point
@@ -246,6 +208,49 @@ int main(int arg1, char ** arg2)
         
         
         
+        if(update_blackhole){
+            update_blackhole = false;
+            glm::vec3 position=cameraPos;
+            glm::vec3 direction=cameraFront;
+            position+= direction*50.0f;
+            blackhole = position;
+        }
+        
+        if(addairbus){
+            glm::vec3 position=cameraPos;
+            glm::vec3 direction=cameraFront;
+            position+= direction*50.0f;
+            glm::mat4 model = glm::mat4(1.0);
+            glm::mat4 positionMat = glm::translate(model, position);
+            glm::vec3 velocity = 1.0f * direction;
+            glm :: mat4 rotatematrix = phyformula :: vectoquat(direction);
+            phyObject *airbus = new phyObject(positionMat,rotatematrix,velocity,"../../../source/Lamborghini_Aventador.obj");
+            all_fly_objects.push_back(airbus);            
+            addairbus = false;
+        }
+        
+        glm :: vec3 boilcenter;
+        for(int i = 0; i<all_fly_objects.size();i++){
+            auto bus1 = all_fly_objects[i];
+            boilcenter +=glm::vec3(bus1->positionMatrix[3]);
+            for(int j = 0;j<all_fly_objects.size();j++){
+                auto bus2 = all_fly_objects[j];
+                if (bus1 == bus2) continue;
+                phyformula::field(bus1,bus2,boundry,t);
+            }
+        }
+        if(all_fly_objects.size())
+            boilcenter /=all_fly_objects.size();
+        
+        for(int i = 0; i<all_fly_objects.size();i++){
+            phyObject* bus1 = all_fly_objects[i];
+            phyformula :: polefield(blackhole,bus1, t,1.0);
+            phyformula :: polefield(boilcenter,bus1, t,0.3);
+        }
+        
+        
+        
+        
         for(int i = 0; i<all_objects.size();i++){
             auto object = all_objects[i];
 
@@ -253,7 +258,6 @@ int main(int arg1, char ** arg2)
                 glm::vec3 center1(all_objects[i]->positionMatrix[3]);
                 glm::vec3 center2(all_objects[j]->positionMatrix[3]);
                 glm::vec3 c2_to_c1 = center1 - center2;
-               
 
                 if (glm::length(c2_to_c1) >= 2.0 * BALL_RADIUS) continue;
                 c2_to_c1 = glm:: normalize(c2_to_c1);
@@ -269,34 +273,27 @@ int main(int arg1, char ** arg2)
                 all_objects[j]->setVelocity(resultv2);
                 all_objects[i]->updateanVelocity();
                 all_objects[j]->updateanVelocity();
-
-
-
             }
             if (object->positionMatrix[3][0] <= -1000 + BALL_RADIUS && object->velocity.x < 0) {
                 glm::vec3 contact_normal(-EnergyLossRate, 1.0, 1.0);
                 object->setVelocity(object->velocity*contact_normal);
                 object->updateanVelocity();
             }
-
             if (object->positionMatrix[3][0] >= 1000 - BALL_RADIUS && object->velocity.x > 0) {
                 glm::vec3 contact_normal(-EnergyLossRate, 1.0, 1.0);
                 object->setVelocity(object->velocity*contact_normal);
                 object->updateanVelocity();
             }
-
             if (object->positionMatrix[3][2] <= -1000 + BALL_RADIUS && object->velocity.z < 0) {
                 glm::vec3 contact_normal(1.0, 1.0,-EnergyLossRate);
                 object->setVelocity(object->velocity*contact_normal);
                 object->updateanVelocity();
             }
-
             if (object->positionMatrix[3][2] >= 1000 - BALL_RADIUS && object->velocity.z > 0) {
                 glm::vec3 contact_normal(1.0, 1.0,-EnergyLossRate);
                 object->setVelocity(object->velocity*contact_normal);
                 object->updateanVelocity();
             }
-
             if (object->positionMatrix[3][1] <= BALL_RADIUS && object->velocity.y <= 0){
                 if (abs(object->velocity.y) < 0.1) {
                     // if the velocity is smaller than threshold
@@ -314,16 +311,31 @@ int main(int arg1, char ** arg2)
                 v1.y += gravity*t;
                 object->setVelocity(v1);
                 object->updateanVelocity();
-
             }
-
-
         }
       
         glm::mat4 view;
         view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
         
         
+        for (auto object:all_fly_objects) {
+            
+            // move the object based on the velocity and then draw
+            
+            object->positionMatrix[3][0] += t * object->velocity.x;
+            object->positionMatrix[3][1] += t * object->velocity.y;
+            object->positionMatrix[3][2] += t * object->velocity.z;
+            
+            glm::mat4 Model1 = object->positionMatrix * object->rotationMatrix;
+            
+            //   std::cout<<object->positionMatrix[3][0]<<' '<<object->positionMatrix[3][1]<<' '<<object->positionMatrix[3][2]<<"\n";
+            sd_ball1.use();
+            sd_ball1.setMat4("view", view);
+            sd_ball1.setFloat("scale", 0.4);
+            sd_ball1.setMat4("projection", projection);
+            sd_ball1.setMat4("model", Model1);
+            object->draw();
+        }
         
         for (auto object:all_objects) {
             
@@ -342,6 +354,7 @@ int main(int arg1, char ** arg2)
          //   std::cout<<object->positionMatrix[3][0]<<' '<<object->positionMatrix[3][1]<<' '<<object->positionMatrix[3][2]<<"\n";
             sd_ball1.use();
             sd_ball1.setMat4("view", view);
+            sd_ball1.setFloat("scale", 1.0);
             sd_ball1.setMat4("projection", projection);
             sd_ball1.setMat4("model", Model1);
             object->draw();
@@ -356,37 +369,11 @@ int main(int arg1, char ** arg2)
             glm::mat4 model = glm::mat4(1.0);
             glm::mat4 positionMat = glm::translate(model, position);
             glm::vec3 velocity = 300.0f * direction;
-            phyObject *ball = new phyObject(positionMat,model,velocity);
+            phyObject *ball = new phyObject(positionMat,model,velocity,"../../../source/beachball.obj");
             all_objects.push_back(ball);
             addball = false;
         
         }
-        
-        
-        
-
-        
-        float radius = 2000.0f;
-        //float camX   = sin(glfwGetTime()) * radius;
-        //float camZ   = cos(glfwGetTime()) * radius;
-        
-        
-        
-        //SET CAMERA VIEW HERE
-        //-----------------------------------------------------------------------
-
-
-
-        
-
-       // sd.use();
-       // sd.setMat4("model", model1);
-       // glDrawElements(GL_TRIANGLES, indices_1.size(), GL_UNSIGNED_INT, 0);
-        
-        
-        //sd.use();
-        //sd.setMat4("model", model2);
-        //glDrawElements(GL_TRIANGLES, indices_1.size(), GL_UNSIGNED_INT, 0);
         
         
         glBindVertexArray(VAO_plane);
@@ -403,28 +390,17 @@ int main(int arg1, char ** arg2)
         glBindBuffer(GL_ARRAY_BUFFER, VBO_cube);
         sd_center.use();
         glm::mat4 worldCenterModel = glm::mat4(1.0);
+        glm :: vec3 position=blackhole+40.0f*cameraFront;
+        worldCenterModel = glm :: translate(worldCenterModel,position);
         sd_center.setMat4("model", worldCenterModel);
         sd_center.setMat4("view", view);
         sd_center.setMat4("projection", projection);
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-     //   glDrawElements(GL_TRIANGLES, indices_cube.size(), GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, indices_cube.size(), GL_UNSIGNED_INT, 0);
         
         
 
         
-        
-        
-        
-//        for(int i = 0; i<keyframeSet.size();i++){
-//        glm::mat4 model = glm::mat4(1.0);
-//        model = glm::translate(model, keyframeSet[i].position);
-//        model =model*keyframeSet[i].getThisRotationMatrix(eulerMode);
-//
-//        sd_cube.use();
-//        sd_cube.setMat4("model", model);
-//        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-//        glDrawElements(GL_TRIANGLES, indices_cube.size(), GL_UNSIGNED_INT, 0);
-//        }
         
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -460,9 +436,23 @@ void processInput(GLFWwindow *window)
         if(currentpresstime-lastpresstime>0.15){
                 addball = true;
                 lastpresstime = currentpresstime;
-            
         }
     }
+    if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS){
+        currentpresstime =glfwGetTime();
+        if(currentpresstime-lastpresstime>0.15){
+            update_blackhole = true;
+            lastpresstime = currentpresstime;
+        }
+    }
+    if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS){
+        currentpresstime =glfwGetTime();
+        if(currentpresstime-lastpresstime>0.15){
+            addairbus = true;
+            lastpresstime = currentpresstime;
+        }
+    }
+
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes

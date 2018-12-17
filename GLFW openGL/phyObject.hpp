@@ -25,6 +25,8 @@ public:
     glm :: vec3 Hvelocity;
     std:: vector< glm::vec3 > vertices_ball1;
     std:: vector<unsigned int> indices_ball1;
+    const char* file;
+    const float speedlimit = 1000.0;
 
     unsigned int VBO_ball1,VAO_ball1,EBO_ball1;
     
@@ -32,15 +34,15 @@ public:
     void draw();
     void updateanVelocity();
     
-    phyObject(glm::mat4 &position,glm :: mat4 &rotation, glm :: vec3 &v)
-    :positionMatrix(position),rotationMatrix(rotation),velocity(v)
+    phyObject(glm::mat4 &position,glm :: mat4 &rotation, glm :: vec3 &v,const char* file)
+    :positionMatrix(position),rotationMatrix(rotation),velocity(v),file(file)
     {
         this->Vvelocity = v*glm::vec3(0.0,1.0,0.0);
         this->Hvelocity = v*glm::vec3(1.0,0.0,1.0);
         glm::vec3 temp = glm::vec3(this->velocity.z,0.0,-this->velocity.x);
         float rate = 1.0;
         this->anvelocity = glm::vec4(temp,glm::length(temp)*rate);
-        Loader :: load_obj("../../../source/beachball.obj", vertices_ball1, indices_ball1);
+        Loader :: load_obj(this->file, vertices_ball1, indices_ball1);
         glGenVertexArrays(1, &VAO_ball1);
         glGenBuffers(1, &VBO_ball1);
         glGenBuffers(1, &EBO_ball1);
