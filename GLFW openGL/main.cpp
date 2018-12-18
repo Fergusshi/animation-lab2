@@ -47,7 +47,7 @@ float boundry = 3000.0;
 bool update_blackhole = false;
 bool addairbus = false;
 
-glm :: vec3 blackhole;
+glm :: vec3 blackhole(0.0,0.0,0.0);
 
 std::vector<phyObject*> all_objects;
 std::vector<phyObject*> all_fly_objects;
@@ -210,26 +210,28 @@ int main(int arg1, char ** arg2)
         
         if(update_blackhole){
             update_blackhole = false;
-            glm::vec3 position=cameraPos;
-            glm::vec3 direction=cameraFront;
+            glm::vec3 position=glm::vec3(cameraPos);
+            glm::vec3 direction=glm::vec3(cameraFront);
             position+= direction*50.0f;
             blackhole = position;
         }
         
         if(addairbus){
-            glm::vec3 position=cameraPos;
-            glm::vec3 direction=cameraFront;
+            addairbus = false;
+            glm::vec3 position=glm::vec3(cameraPos);
+            glm::vec3 direction=glm::vec3(cameraFront);
             position+= direction*50.0f;
             glm::mat4 model = glm::mat4(1.0);
             glm::mat4 positionMat = glm::translate(model, position);
             glm::vec3 velocity = 1.0f * direction;
             glm :: mat4 rotatematrix = phyformula :: vectoquat(direction);
             phyObject *airbus = new phyObject(positionMat,rotatematrix,velocity,"../../../source/Lamborghini_Aventador.obj");
-            all_fly_objects.push_back(airbus);            
-            addairbus = false;
+            std:: cout<< glm ::to_string(positionMat)<<"1\n"<<glm ::to_string(positionMat)<<"2\n"<< glm ::to_string(velocity);
+            all_fly_objects.push_back(airbus);
+            
         }
         
-        glm :: vec3 boilcenter;
+        glm :: vec3 boilcenter = glm :: vec3(0.0,0.0,0.0);
         for(int i = 0; i<all_fly_objects.size();i++){
             auto bus1 = all_fly_objects[i];
             boilcenter +=glm::vec3(bus1->positionMatrix[3]);
@@ -239,13 +241,14 @@ int main(int arg1, char ** arg2)
                 phyformula::field(bus1,bus2,boundry,t);
             }
         }
-        if(all_fly_objects.size())
+        if(all_fly_objects.size() > 0)
             boilcenter /=all_fly_objects.size();
         
         for(int i = 0; i<all_fly_objects.size();i++){
             phyObject* bus1 = all_fly_objects[i];
             phyformula :: polefield(blackhole,bus1, t,1.0);
-            phyformula :: polefield(boilcenter,bus1, t,0.3);
+            if(all_fly_objects.size() > 1)
+                phyformula :: polefield(boilcenter,bus1, t,0.3);
         }
         
         
